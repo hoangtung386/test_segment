@@ -34,15 +34,33 @@ class BRATSDataset(torch.utils.data.Dataset):
             # if there are no subdirs, we have data
             if not dirs:
                 files.sort()
+                # Filter out non-.nii/.nii.gz files
+                files = [f for f in files if f.endswith('.nii.gz') or f.endswith('.nii')]
+                
+                if len(files) == 0:
+                    continue
+                    
                 datapoint = dict()
                 # extract all files as channels
                 for f in files:
                     # Fixed: changed from index 3 to index 2
-                    seqtype = f.split('_')[2].split('.')[0]
-                    datapoint[seqtype] = os.path.join(root, f)
-                assert set(datapoint.keys()) == self.seqtypes_set, \
-                    f'datapoint is incomplete, keys are {datapoint.keys()}'
-                self.database.append(datapoint)
+                    try:
+                        seqtype = f.split('_')[2].split('.')[0]
+                        datapoint[seqtype] = os.path.join(root, f)
+                    except IndexError:
+                        print(f"Warning: Cannot parse filename {f}, skipping...")
+                        continue
+                
+                # Debug: Print what we found
+                if len(datapoint) > 0 and set(datapoint.keys()) != self.seqtypes_set:
+                    print(f"Warning: Folder {root} has incomplete data")
+                    print(f"  Expected: {self.seqtypes_set}")
+                    print(f"  Found: {set(datapoint.keys())}")
+                    print(f"  Files: {files}")
+                    continue
+                    
+                if set(datapoint.keys()) == self.seqtypes_set:
+                    self.database.append(datapoint)
 
     def __getitem__(self, x):
         out = []
@@ -102,17 +120,33 @@ class BRATSDataset3D(torch.utils.data.Dataset):
             # if there are no subdirs, we have data
             if not dirs:
                 files.sort()
+                # Filter out non-.nii.gz files
+                files = [f for f in files if f.endswith('.nii.gz')]
+                
+                if len(files) == 0:
+                    continue
+                    
                 datapoint = dict()
                 # extract all files as channels
                 for f in files:
                     # Fixed: changed from index 3 to index 2
-                    seqtype = f.split('_')[2].split('.')[0]
-                    datapoint[seqtype] = os.path.join(root, f)
-                assert set(datapoint.keys()) == self.seqtypes_set, \
-                    f'datapoint is incomplete, keys are {datapoint.keys()}'
-                self.database.append(datapoint)
-    
-    def __len__(self):
+                    try:
+                        seqtype = f.split('_')[2].split('.')[0]
+                        datapoint[seqtype] = os.path.join(root, f)
+                    except IndexError:
+                        print(f"Warning: Cannot parse filename {f}, skipping...")
+                        continue
+                
+                # Debug: Print what we found
+                if len(datapoint) > 0 and set(datapoint.keys()) != self.seqtypes_set:
+                    print(f"Warning: Folder {root} has incomplete data")
+                    print(f"  Expected: {self.seqtypes_set}")
+                    print(f"  Found: {set(datapoint.keys())}")
+                    print(f"  Files: {files}")
+                    continue
+                    
+                if set(datapoint.keys()) == self.seqtypes_set:
+                    self.database.append(datapoint)
         return len(self.database) * 155
 
     def __getitem__(self, x):
@@ -147,6 +181,4 @@ class BRATSDataset3D(torch.utils.data.Dataset):
                 torch.set_rng_state(state)
                 label = self.transform(label)
             return (image, label, path.split('.nii')[0] + "_slice" + str(slice)+ ".nii") # virtual path
-            
-            
-    
+        
