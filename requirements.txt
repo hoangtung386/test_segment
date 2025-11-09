@@ -1,0 +1,35 @@
+# Core Deep Learning Framework
+torch==2.4.1
+torchvision==0.19.1
+torchaudio==2.4.1
+torchsummary==1.5.1
+
+# Medical Image Processing
+nibabel==5.3.2
+batchgenerators==0.25.1
+
+# Computer Vision & Image Processing
+opencv-python==4.12.0.88
+scikit-image==0.25.2
+imageio==2.37.2
+pillow==12.0.0
+tifffile==2025.10.16
+
+# Scientific Computing
+numpy==2.2.6
+scipy==1.16.3
+scikit-learn==1.7.2
+pandas==2.3.3
+
+# Visualization
+matplotlib==3.10.7
+visdom==0.2.4
+
+# Utilities
+tqdm
+joblib==1.5.2
+requests==2.32.5
+lxml==6.0.2
+
+# MPI (nếu cần parallel processing - có thể bỏ nếu không dùng)
+mpi4py==4.0.3
