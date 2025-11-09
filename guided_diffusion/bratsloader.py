@@ -53,10 +53,10 @@ class BRATSDataset(torch.utils.data.Dataset):
                 
                 # Debug: Print what we found
                 if len(datapoint) > 0 and set(datapoint.keys()) != self.seqtypes_set:
-                    print(f"Warning: Folder {root} has incomplete data")
-                    print(f"  Expected: {self.seqtypes_set}")
-                    print(f"  Found: {set(datapoint.keys())}")
-                    print(f"  Files: {files}")
+                    # print(f"Warning: Folder {root} has incomplete data")
+                    # print(f"  Expected: {self.seqtypes_set}")
+                    # print(f"  Found: {set(datapoint.keys())}")
+                    # print(f"  Files: {files}")
                     continue
                     
                 if set(datapoint.keys()) == self.seqtypes_set:
@@ -185,4 +185,3 @@ class BRATSDataset3D(torch.utils.data.Dataset):
                 torch.set_rng_state(state)
                 label = self.transform(label)
             return (image, label, path.split('.nii')[0] + "_slice" + str(slice)+ ".nii") # virtual path
-    
