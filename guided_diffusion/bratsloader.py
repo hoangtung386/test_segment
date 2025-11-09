@@ -120,8 +120,8 @@ class BRATSDataset3D(torch.utils.data.Dataset):
             # if there are no subdirs, we have data
             if not dirs:
                 files.sort()
-                # Filter out non-.nii.gz files
-                files = [f for f in files if f.endswith('.nii.gz')]
+                # Filter out non-.nii/.nii.gz files
+                files = [f for f in files if f.endswith('.nii.gz') or f.endswith('.nii')]
                 
                 if len(files) == 0:
                     continue
@@ -147,6 +147,10 @@ class BRATSDataset3D(torch.utils.data.Dataset):
                     
                 if set(datapoint.keys()) == self.seqtypes_set:
                     self.database.append(datapoint)
+        
+        print(f"Loaded {len(self.database)} complete patient scans")
+    
+    def __len__(self):
         return len(self.database) * 155
 
     def __getitem__(self, x):
@@ -181,4 +185,4 @@ class BRATSDataset3D(torch.utils.data.Dataset):
                 torch.set_rng_state(state)
                 label = self.transform(label)
             return (image, label, path.split('.nii')[0] + "_slice" + str(slice)+ ".nii") # virtual path
-        
+    
