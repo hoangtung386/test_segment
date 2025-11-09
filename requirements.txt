@@ -1,7 +1,4 @@
 # Core Deep Learning Framework
-torch==2.4.1
-torchvision==0.19.1
-torchaudio==2.4.1
 torchsummary==1.5.1
 
 # Medical Image Processing
