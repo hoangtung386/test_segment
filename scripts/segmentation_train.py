@@ -17,8 +17,9 @@ from guided_diffusion.script_util import (
 import torch as th
 from pathlib import Path
 from guided_diffusion.train_util import TrainLoop
-from visdom import Visdom
-viz = Visdom(port=8850)
+# Disable Visdom to reduce log noise
+# from visdom import Visdom
+# viz = Visdom(port=8850)
 import torchvision.transforms as transforms
 
 def main():
